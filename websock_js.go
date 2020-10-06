@@ -30,14 +30,13 @@ var (
 //init checks to see if the browser hosting this application support the Websocket Blob interface
 func init() {
 	newBlob := js.Global().Get("Blob")
-	if newBlob == jsUndefined {
+	if newBlob.IsUndefined() {
 		blobSupported = false
 		return
 	}
 
 	testBlob := js.Global().Get("Blob").New()
-	blobSupported = testBlob.Get("arrayBuffer") != jsUndefined &&
-		testBlob.Get("stream") != js.Undefined()
+	blobSupported = !testBlob.Get("arrayBuffer").IsUndefined() && !testBlob.Get("stream").IsUndefined()
 	if debugVerbose {
 		println("Websocket: Init: EnableBlobStreaming is", EnableBlobStreaming, "and blobSupported is", blobSupported)
 	}
